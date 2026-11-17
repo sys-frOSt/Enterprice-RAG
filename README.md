@@ -1,13 +1,14 @@
 # Enterprise RAG
 
-A modular Retrieval-Augmented Generation service built with Python, LangChain,
-the Groq API through `langchain-groq`, BAAI/BGE-M3 embeddings, and Qdrant.
+A modular Retrieval-Augmented Generation service built with Python, LangGraph,
+LangChain integrations, the Groq API through `langchain-groq`, BAAI/BGE-M3
+embeddings, and Qdrant.
 
 ## Status
 
 The complete initial application is implemented: PDF ingestion, BGE-M3
-embeddings, Qdrant storage and retrieval, Llama generation through Groq, a LangChain RAG
-chain, FastAPI endpoints, structured configuration, and automated tests.
+embeddings, Qdrant storage and retrieval, Llama generation through Groq, a
+LangGraph RAG workflow, FastAPI endpoints, structured configuration, and automated tests.
 
 ## Requirements
 
@@ -46,7 +47,7 @@ app/
   embeddings/   BGE-M3 embedding adapter
   ingestion/   PDF loading and chunking
   llm/          ChatGroq integration
-  rag/          Prompt and Runnable chain
+  rag/          Prompt and LangGraph workflow
   retrieval/    Semantic retrieval
   utils/        Logging and shared utilities
   vectorstore/  Qdrant adapter

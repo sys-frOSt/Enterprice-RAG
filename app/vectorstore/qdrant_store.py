@@ -35,14 +35,20 @@ class QdrantStore:
 
     def _ensure_collection(self) -> None:
         collections = self.client.get_collections().collections
-        if any(item.name == self.settings.collection_name for item in collections):
-            return
-        self.client.create_collection(
+        exists = any(item.name == self.settings.collection_name for item in collections)
+        if not exists:
+            self.client.create_collection(
+                collection_name=self.settings.collection_name,
+                vectors_config=models.VectorParams(
+                    size=self.settings.embedding_dimension,
+                    distance=models.Distance.COSINE,
+                ),
+            )
+        # Ensure payload index exists for filtered queries (idempotent).
+        self.client.create_payload_index(
             collection_name=self.settings.collection_name,
-            vectors_config=models.VectorParams(
-                size=self.settings.embedding_dimension,
-                distance=models.Distance.COSINE,
-            ),
+            field_name="metadata.document_id",
+            field_schema=models.PayloadSchemaType.KEYWORD,
         )
 
     def health(self) -> bool:

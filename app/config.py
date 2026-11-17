@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field, ValidationError, field_validator
 
 class Settings(BaseModel):
     groq_api_key: str = Field(default="", repr=False)
-    groq_model: str = "openai/gpt-oss-20b"
+    groq_model: str = "openai/gpt-oss-120b"
     qdrant_url: str = "http://localhost:6333"
     qdrant_api_key: str | None = Field(default=None, repr=False)
     collection_name: str = "enterprise_rag"
@@ -21,6 +21,8 @@ class Settings(BaseModel):
     chunk_overlap: int = Field(default=150, ge=0)
     request_timeout_seconds: float = Field(default=60, gt=0)
     max_upload_size_mb: int = Field(default=25, ge=1, le=500)
+    atlassian_email: str | None = None
+    atlassian_api_token: str | None = Field(default=None, repr=False)
 
     @field_validator("groq_model", "collection_name", "embedding_model")
     @classmethod
@@ -51,7 +53,7 @@ def _read_environment() -> dict[str, object]:
     load_dotenv(Path(".env"))
     return {
         "groq_api_key": os.getenv("GROQ_API_KEY", ""),
-        "groq_model": os.getenv("GROQ_MODEL", "openai/gpt-oss-20b"),
+        "groq_model": os.getenv("GROQ_MODEL", "openai/gpt-oss-120b"),
         "qdrant_url": os.getenv("QDRANT_URL", "http://localhost:6333"),
         "qdrant_api_key": os.getenv("QDRANT_API_KEY") or None,
         "collection_name": os.getenv("COLLECTION_NAME", "enterprise_rag"),
@@ -64,6 +66,8 @@ def _read_environment() -> dict[str, object]:
         "chunk_overlap": os.getenv("CHUNK_OVERLAP", 150),
         "request_timeout_seconds": os.getenv("REQUEST_TIMEOUT_SECONDS", 60),
         "max_upload_size_mb": os.getenv("MAX_UPLOAD_SIZE_MB", 25),
+        "atlassian_email": os.getenv("ATLASSIAN_EMAIL") or None,
+        "atlassian_api_token": os.getenv("ATLASSIAN_API_TOKEN") or None,
     }
 
 
